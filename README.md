@@ -1,8 +1,2 @@
-moderngpu
-=========
+This is a crudely patched old version of moderngpu allowing [fknorr/cudpp](https://github.com/fknorr/cudpp) to continue working on `sm_61+` GPUs without porting it to a newer version. Use [moderngpu/moderngpu](https://github.com/moderngpu/moderngpu) instead.
 
-Design patterns for GPU computing
-
-Modern GPU is code and commentary intended to promote new and productive ways of thinking about GPU computing.
-
-http://nvlabs.github.io/moderngpu
