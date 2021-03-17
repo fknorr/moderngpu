@@ -121,7 +121,7 @@ MGPU_LAUNCH_BOUNDS void KernelScanParallel(DataIt data_global, int count,
 	int tid = threadIdx.x;
 	
 	// Scan from data_global into dest_global.
-	T total = TileScan::DeviceScanTile<Type>(data_global, count, tid, identity, 
+	T total = TileScan::template DeviceScanTile<Type>(data_global, count, tid, identity,
 		op, identity, dest_global, shared.tileScanStorage);
 
 	if(!tid && total_global)
@@ -150,7 +150,7 @@ MGPU_LAUNCH_BOUNDS void KernelScanDownsweep(DataIt data_global, int count,
 	T start = reduction_global[block];
 
 	// Scan from data_global into dest_global.
-	TileScan::DeviceScanTile<Type>(data_global + gid, count2, tid, 
+	TileScan::template DeviceScanTile<Type>(data_global + gid, count2, tid,
 		identity, op, start, dest_global + gid, tileScanStorage);
 }
 

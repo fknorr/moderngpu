@@ -267,7 +267,7 @@ MGPU_DEVICE int CTABinaryScan(int tid, bool x, int* shared, int* total) {
 	int lane = (WARP_SIZE - 1);
 
 	// Store the bit totals for each warp.
-	uint bits = __ballot(x);
+	uint bits = __ballot_sync(x, 0xffffffff);
 	shared[warp] = popc(bits);
 	__syncthreads();
 

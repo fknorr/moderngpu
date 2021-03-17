@@ -109,7 +109,7 @@ __device__ __forceinline__ float shfl_up(float var,
 	unsigned int delta, int width = 32) {
 
 #if __CUDA_ARCH__ >= 300
-	var = __shfl_up(var, delta, width);
+	var = __shfl_up_sync(var, delta, width, 0xffffffff);
 #endif	
 	return var;
 }
@@ -119,8 +119,8 @@ __device__ __forceinline__ double shfl_up(double var,
 
 #if __CUDA_ARCH__ >= 300
 	int2 p = mgpu::double_as_int2(var);
-	p.x = __shfl_up(p.x, delta, width);
-	p.y = __shfl_up(p.y, delta, width);
+	p.x = __shfl_up_sync(p.x, delta, width, 0xffffffff);
+	p.y = __shfl_up_sync(p.y, delta, width, 0xffffffff);
 	var = mgpu::int2_as_double(p);
 #endif
 	
@@ -137,7 +137,7 @@ MGPU_DEVICE int shfl_add(int x, int offset, int width = WARP_SIZE) {
 	asm(
 		"{.reg .s32 r0;"
 		".reg .pred p;"
-		"shfl.up.b32 r0|p, %1, %2, %3;"
+		"shfl.sync.up.b32 r0|p, %1, %2, %3, 0xffffffff;"
 		"@p add.s32 r0, r0, %4;"
 		"mov.s32 %0, r0; }"
 		: "=r"(result) : "r"(x), "r"(offset), "r"(mask), "r"(x));
@@ -152,7 +152,7 @@ MGPU_DEVICE int shfl_max(int x, int offset, int width = WARP_SIZE) {
 	asm(
 		"{.reg .s32 r0;"
 		".reg .pred p;"
-		"shfl.up.b32 r0|p, %1, %2, %3;"
+		"shfl.sync.up.b32 r0|p, %1, %2, %3, 0xffffffff;"
 		"@p max.s32 r0, r0, %4;"
 		"mov.s32 %0, r0; }"
 		: "=r"(result) : "r"(x), "r"(offset), "r"(mask), "r"(x));
